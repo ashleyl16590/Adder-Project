@@ -1,0 +1,19 @@
+// Design
+// Full Adder
+module fullAdder (a, b, cIn, one, two, three, sum, carry);
+  input a;
+  input b;
+  input cIn;
+  wire one;
+  wire two;
+  wire three;
+  output sum;
+  output carry;
+  
+  assign one = a ^ b;
+  assign two = one & cIn;
+  assign three = a & b;
+  assign sum = cIn ^ one;
+  assign carry = two | three;
+  
+endmodule
