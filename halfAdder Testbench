@@ -1,0 +1,43 @@
+// Testbench
+module test;
+  
+  reg a;
+  reg b;
+  wire sum;
+  wire carry;
+  
+  // Instantiate design under test
+  halfAdder hA(.a(a), .b(b), .sum(sum), .carry(carry));
+  
+  initial begin
+    //Dump waves
+    $dumpfile("dump.vcd");
+    $dumpvars(1);
+    
+    $display("When a=0, b=0");
+    a = 0;
+    b = 0;
+    display;
+    
+    $display("When a=0, b=1");
+    a = 0;
+    b = 1;
+    display;
+    
+    $display("When a=1, b=0");
+    a = 1;
+    b = 0;
+    display;
+    
+    $display("When a=1, b=1");
+    a = 1;
+    b = 1;
+    display;
+  
+  end
+  
+  task display;
+    #1 $display("a:%b, b:%b, sum:%b, carry:%b", a, b, sum, carry);
+  endtask
+
+endmodule
