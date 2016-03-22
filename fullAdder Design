@@ -1,6 +1,6 @@
 // Design
 // Full Adder
-module fullAdder (a, b, cIn, one, two, three, sum, carry);
+module fullAdder (a, b, cIn, sum, carry);
   input a;
   input b;
   input cIn;
