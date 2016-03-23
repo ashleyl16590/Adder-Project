@@ -1,0 +1,27 @@
+// Testbench
+module test;
+  
+  reg a;
+  reg b;
+  reg cIn;
+  wire sum;
+  wire carry;
+  
+  // Instantiate design under test
+  fullAdder fA(.a(a), .b(b), .cIn(cIn), .sum(sum), .carry(carry));
+  
+  initial begin
+    a = 1'b0;
+    b = 1'b0;
+    cIn = 1'b0;
+    #8 $finish;
+  end
+  
+  always #4 a = ~a;
+  always #2 b = ~b;
+  always #1 cIn = ~cIn;
+  
+  always @(sum, carry)
+    $display("time=%0t \tINPUT VALUES: \t a=%b b=%b cIn=%b \t sum=%b carry=%b", $time, a,b,cIn,sum,carry);
+
+endmodule
