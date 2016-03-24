@@ -1,0 +1,59 @@
+// Design
+// Four Bit Adder
+
+module fourBitAdder (a0, a1, a2, a3, b0, b1, b2, b3, s0, s1, s2, s3, c3);
+  
+  input a0;
+  input a1;
+  input a2;
+  input a3;
+  input b0;
+  input b1;
+  input b2;
+  input b3;
+  
+  wire c0;
+  wire c1;
+  wire c2;
+  
+  wire x0;
+  wire x1;
+  wire x2;
+  wire x3;
+  wire y0;
+  wire y1;
+  wire y2;
+  wire y3;
+  wire z0;
+  wire z1;
+  wire z2;
+  wire z3;
+
+  output s0;
+  output s1;
+  output s2;
+  output s3;
+  output c3;
+  
+  assign s0 = a0 ^ b0;
+  assign c0 = a0 & b0;
+  
+  assign x1 = a1 ^ b1;
+  assign y1 = x1 & c0;
+  assign z1 = a1 & b1;
+  assign c1 = y1 | z1;
+  assign s1 = x1 ^ c0;
+  
+  assign x2 = a2 ^ b2;
+  assign y2 = x2 & c1;
+  assign z2 = a2 & b2;
+  assign c2 = y2 | z2;
+  assign s2 = x2 ^ c1;
+  
+  assign x3 = a3 ^ b3;
+  assign y3 = x3 & c2;
+  assign z3 = a3 & b3;
+  assign c3 = y3 | z3;
+  assign s3 = x3 ^ c2;
+  
+endmodule
