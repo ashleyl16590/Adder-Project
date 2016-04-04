@@ -1,0 +1,96 @@
+//Testbench
+module test;
+  
+  reg clock,reset,em;
+  wire n_red,n_yellow,n_green,e_red,e_yellow,e_green;
+  
+  //Instantiate device under test
+  fsm_traffic_light FTL(.clock(clock),
+                        .reset(reset),
+                        .em(em),
+                        .n_red(n_red),
+                        .n_yellow(n_yellow),
+                        .n_green(n_green),
+                        .e_red(e_red),
+                        .e_yellow(e_yellow),
+                        .e_green(e_green));
+  
+  initial begin
+    //Dump waves
+    $dumpfile("dump.vcd");
+    $dumpvars(1, test);
+    
+    clock=0;
+    reset=0;
+    em=0;
+    $display("Initial nr:%b, ny:%b, ng:%b, er:%b, ey:%b, eg:%b", n_red, n_yellow, n_green, e_red, e_yellow, e_green);
+    
+    //initial reset
+    $display("RESET - temp");
+    reset=1;
+    toggle_clock;
+    $display("IDLE nr:%b, ny:%b, ng:%b, er:%b, ey:%b, eg:%b", n_red, n_yellow, n_green, e_red, e_yellow, e_green);
+    
+    //after reset
+    reset=0;
+    toggle_clock;
+    toggle_clock;
+    $display("S1 nr:%b, ny:%b, ng:%b, er:%b, ey:%b, eg:%b", n_red, n_yellow, n_green, e_red, e_yellow, e_green);
+    
+    toggle_clock;
+    $display("S2 nr:%b, ny:%b, ng:%b, er:%b, ey:%b, eg:%b", n_red, n_yellow, n_green, e_red, e_yellow, e_green);
+    
+    toggle_clock;
+    $display("S3 nr:%b, ny:%b, ng:%b, er:%b, ey:%b, eg:%b", n_red, n_yellow, n_green, e_red, e_yellow, e_green);
+    
+    toggle_clock;
+    $display("S4 nr:%b, ny:%b, ng:%b, er:%b, ey:%b, eg:%b", n_red, n_yellow, n_green, e_red, e_yellow, e_green);
+    
+    toggle_clock;
+    $display("S5 nr:%b, ny:%b, ng:%b, er:%b, ey:%b, eg:%b", n_red, n_yellow, n_green, e_red, e_yellow, e_green);
+    
+    toggle_clock;
+    $display("IDLE nr:%b, ny:%b, ng:%b, er:%b, ey:%b, eg:%b", n_red, n_yellow, n_green, e_red, e_yellow, e_green);
+    
+    toggle_clock;
+    $display("S1 nr:%b, ny:%b, ng:%b, er:%b, ey:%b, eg:%b", n_red, n_yellow, n_green, e_red, e_yellow, e_green);
+    
+    //reset
+    $display("RESET - temp");
+    reset=1;
+    toggle_clock;
+    $display("IDLE nr:%b, ny:%b, ng:%b, er:%b, ey:%b, eg:%b", n_red, n_yellow, n_green, e_red, e_yellow, e_green);
+    
+    reset=0;
+    toggle_clock;
+    toggle_clock;
+    $display("S1 nr:%b, ny:%b, ng:%b, er:%b, ey:%b, eg:%b", n_red, n_yellow, n_green, e_red, e_yellow, e_green);
+    
+    //emergency vehicle
+    $display("EMERGENCY - temp");
+    em=1;
+    toggle_clock;
+    toggle_clock;
+    $display("S2 nr:%b, ny:%b, ng:%b, er:%b, ey:%b, eg:%b", n_red, n_yellow, n_green, e_red, e_yellow, e_green);
+    
+    toggle_clock;
+    $display("S2 nr:%b, ny:%b, ng:%b, er:%b, ey:%b, eg:%b", n_red, n_yellow, n_green, e_red, e_yellow, e_green);
+    
+    //end emergency
+    $display("RESUME - WAIT");
+    em=0;
+    toggle_clock;
+    $display("S2 nr:%b, ny:%b, ng:%b, er:%b, ey:%b, eg:%b", n_red, n_yellow, n_green, e_red, e_yellow, e_green);
+    
+    toggle_clock;
+    $display("S3 nr:%b, ny:%b, ng:%b, er:%b, ey:%b, eg:%b", n_red, n_yellow, n_green, e_red, e_yellow, e_green);
+  end
+  
+  task toggle_clock;
+    begin
+      #18 clock = ~clock;
+      #18 clock = ~clock;
+    end
+  endtask
+  
+endmodule
