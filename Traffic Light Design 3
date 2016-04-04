@@ -1,0 +1,166 @@
+//FSM for Traffic Light State Machine #1
+module fsm_traffic_light (
+  clock,
+  reset,
+  em,
+  n_red,
+  n_yellow,
+  n_green,
+  e_red,
+  e_yellow,
+  e_green
+);
+ 
+  //Input Ports
+  input clock, reset, em;
+  
+  //Output Ports
+  output n_red,n_yellow,n_green,e_red,e_yellow,e_green;
+  
+  //Input Ports Data Type
+  wire clock, reset, em;
+  
+  //Output Ports Data Type
+  reg n_red,n_yellow,n_green,e_red,e_yellow,e_green;
+  
+  //Internal Constants
+  parameter SIZE = 6;
+  parameter IDLE=6'b000000, S1=6'b000001, S2=6'b000010, S3=6'b000011, S4=6'b000100, S5=6'b000101;
+  
+  //Internal Variables
+  reg [SIZE-1:0] state;
+  reg [SIZE-1:0] next_state;
+  reg [SIZE-1:0] current_state;
+  
+  //Code Starts Here
+  assign next_state = fsm_function(state);
+  assign current_state = stay_function(state);
+  
+  //Function for Combo Logic
+  function [SIZE-1:0] fsm_function;
+    input [SIZE-1:0] state;
+    case(state)
+      IDLE: begin
+          fsm_function = S1;
+        end
+      S1: begin
+          fsm_function = S2;
+      end
+      S2: begin
+          fsm_function = S3;
+        end
+      S3: begin
+          fsm_function = S4;
+      end
+      S4: begin
+          fsm_function = S5;
+        end
+      S5: begin
+          fsm_function = IDLE;
+        end
+    default: fsm_function = IDLE;
+    endcase
+  endfunction
+  
+  function [SIZE-1:0] stay_function;
+    input [SIZE-1:0] state;
+    case(state)
+      IDLE: begin
+          stay_function = IDLE;
+        end
+      S1: begin
+          stay_function = S1;
+        end
+      S2: begin
+          stay_function = S2;
+        end
+      S3: begin
+          stay_function = S3;
+        end
+      S4: begin
+          stay_function = S4;
+        end
+      S5: begin
+          stay_function = S5;
+        end
+    default: stay_function = IDLE;
+    endcase
+  endfunction
+  
+  //Seq Logic
+  always @ (posedge clock)
+    begin: FSM_SEQ
+      if(reset == 1'b1) begin
+        state <= IDLE;
+      end else if(em == 1'b1) begin
+        state <= current_state;
+      end else begin
+        state <= next_state;
+      end
+    end
+  
+  //Output Logic
+  always @ (posedge clock)
+    begin: OUTPUT_LOGIC
+      if(reset == 1'b1) begin
+		n_red <= 1'b1;
+        n_yellow <= 1'b0;
+        n_green <= 1'b0;
+        e_red <= 1'b1;
+        e_yellow <= 1'b0;
+        e_green <= 1'b0;
+      end
+      else begin
+        case(state)
+          IDLE: begin
+            n_red <= 1'b1;
+            n_yellow <= 1'b0;
+            n_green <= 1'b0;
+            e_red <= 1'b1;
+            e_yellow <= 1'b0;
+            e_green <= 1'b0;
+          end
+          S1: begin
+            n_red <= 1'b0;
+            n_yellow <= 1'b0;
+            n_green <= 1'b1;
+            e_red <= 1'b1;
+            e_yellow <= 1'b0;
+            e_green <= 1'b0;
+          end
+          S2: begin
+            n_red <= 1'b0;
+            n_yellow <= 1'b1;
+            n_green <= 1'b0;
+            e_red <= 1'b1;
+            e_yellow <= 1'b0;
+            e_green <= 1'b0;
+          end
+          S3: begin
+            n_red <= 1'b1;
+            n_yellow <= 1'b0;
+            n_green <= 1'b0;
+            e_red <= 1'b1;
+            e_yellow <= 1'b0;
+            e_green <= 1'b0;
+          end
+          S4: begin
+            n_red <= 1'b1;
+            n_yellow <= 1'b0;
+            n_green <= 1'b0;
+            e_red <= 1'b0;
+            e_yellow <= 1'b0;
+            e_green <= 1'b1;
+          end
+          S5: begin
+            n_red <= 1'b1;
+            n_yellow <= 1'b0;
+            n_green <= 1'b0;
+            e_red <= 1'b0;
+            e_yellow <= 1'b1;
+            e_green <= 1'b0;
+          end
+        endcase
+      end
+    end
+endmodule
