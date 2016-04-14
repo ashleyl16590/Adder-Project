@@ -106,6 +106,7 @@ module test;
     $display("S1: nr:%b, ny:%b, ng:%b, nly:%b, nlg:%b, sr:%b, sy:%b, sg:%b, sly:%b, slg:%b, er:%b, ey:%b, eg:%b, ely:%b, elg:%b, wr:%b, wy:%b, wg:%b, wly:%b, wlg:%b", nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg ,er, ey, eg, ely, elg, wr, wy, wg, wly, wlg);
     
     //emergency vehicle
+    $display("EMERGENCY");
     em=1;
     toggle_clock;
     toggle_clock;
@@ -118,10 +119,11 @@ module test;
     $display("RESUME - WAIT");
     em=0;
     toggle_clock;
-    $display("S2: nr:%b, ny:%b, ng:%b, nly:%b, nlg:%b, sr:%b, sy:%b, sg:%b, sly:%b, slg:%b, er:%b, ey:%b, eg:%b, ely:%b, elg:%b, wr:%b, wy:%b, wg:%b, wly:%b, wlg:%b", nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg ,er, ey, eg, ely, elg, wr, wy, wg, wly, wlg);
+    toggle_clock;
+    $display("S3: nr:%b, ny:%b, ng:%b, nly:%b, nlg:%b, sr:%b, sy:%b, sg:%b, sly:%b, slg:%b, er:%b, ey:%b, eg:%b, ely:%b, elg:%b, wr:%b, wy:%b, wg:%b, wly:%b, wlg:%b", nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg ,er, ey, eg, ely, elg, wr, wy, wg, wly, wlg);
     
     toggle_clock;
-    $display("S2: nr:%b, ny:%b, ng:%b, nly:%b, nlg:%b, sr:%b, sy:%b, sg:%b, sly:%b, slg:%b, er:%b, ey:%b, eg:%b, ely:%b, elg:%b, wr:%b, wy:%b, wg:%b, wly:%b, wlg:%b", nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg ,er, ey, eg, ely, elg, wr, wy, wg, wly, wlg);
+    $display("S4: nr:%b, ny:%b, ng:%b, nly:%b, nlg:%b, sr:%b, sy:%b, sg:%b, sly:%b, slg:%b, er:%b, ey:%b, eg:%b, ely:%b, elg:%b, wr:%b, wy:%b, wg:%b, wly:%b, wlg:%b", nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg ,er, ey, eg, ely, elg, wr, wy, wg, wly, wlg);
   end
   
   task toggle_clock;
