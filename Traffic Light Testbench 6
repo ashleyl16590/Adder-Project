@@ -1,0 +1,113 @@
+//Testbench
+module test;
+  
+  reg clock, reset, em, tn, ts, te, tw;
+  wire nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg, er, ey, eg, ely, elg, wr, wy, wg, wly, wlg;
+  
+  //Instantiate device under test
+  fsm_traffic_light FTL(.clock(clock),
+                        .reset(reset),
+                        .em(em),
+                        .tn(tn),
+                        .ts(ts),
+                        .te(te),
+                        .tw(tw),
+                        .nr(nr),
+                        .ny(ny),
+                        .ng(ng),
+                        .nly(nly),
+                        .nlg(nlg),
+                        .sr(sr),
+                        .sy(sy),
+                        .sg(sg),
+                        .sly(sly),
+                        .slg(slg),
+                        .er(er),
+                        .ey(ey),
+                        .eg(eg),
+                        .ely(ely),
+                        .elg(elg),
+                        .wr(wr),
+                        .wy(wy),
+                        .wg(wg),
+                        .wly(wly),
+                        .wlg(wlg));
+  initial begin
+    //Dump waves
+    $dumpfile("dump.vcd");
+    $dumpvars(1,test);
+    
+    clock=0;
+    reset=0;
+    em=0;
+    tn=0;
+    ts=0;
+    te=0;
+    tw=0;
+    $display("nr:%b, ny:%b, ng:%b, nly:%b, nlg:%b, sr:%b, sy:%b, sg:%b, sly:%b, slg:%b, er:%b, ey:%b, eg:%b, ely:%b, elg:%b, wr:%b, wy:%b, wg:%b, wly:%b, wlg:%b", nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg ,er, ey, eg, ely, elg, wr, wy, wg, wly, wlg);
+    
+    //reset
+    reset=1;
+    toggle_clock;
+    $display("S0: nr:%b, ny:%b, ng:%b, nly:%b, nlg:%b, sr:%b, sy:%b, sg:%b, sly:%b, slg:%b, er:%b, ey:%b, eg:%b, ely:%b, elg:%b, wr:%b, wy:%b, wg:%b, wly:%b, wlg:%b", nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg ,er, ey, eg, ely, elg, wr, wy, wg, wly, wlg);
+    
+    //after reset
+    reset=0;
+    toggle_clock;
+    toggle_clock;
+    $display("S1: nr:%b, ny:%b, ng:%b, nly:%b, nlg:%b, sr:%b, sy:%b, sg:%b, sly:%b, slg:%b, er:%b, ey:%b, eg:%b, ely:%b, elg:%b, wr:%b, wy:%b, wg:%b, wly:%b, wlg:%b", nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg ,er, ey, eg, ely, elg, wr, wy, wg, wly, wlg);
+    
+    toggle_clock;
+    $display("S2: nr:%b, ny:%b, ng:%b, nly:%b, nlg:%b, sr:%b, sy:%b, sg:%b, sly:%b, slg:%b, er:%b, ey:%b, eg:%b, ely:%b, elg:%b, wr:%b, wy:%b, wg:%b, wly:%b, wlg:%b", nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg ,er, ey, eg, ely, elg, wr, wy, wg, wly, wlg);
+    
+    toggle_clock;
+    $display("S3: nr:%b, ny:%b, ng:%b, nly:%b, nlg:%b, sr:%b, sy:%b, sg:%b, sly:%b, slg:%b, er:%b, ey:%b, eg:%b, ely:%b, elg:%b, wr:%b, wy:%b, wg:%b, wly:%b, wlg:%b", nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg ,er, ey, eg, ely, elg, wr, wy, wg, wly, wlg);
+    
+    toggle_clock;
+    $display("S4: nr:%b, ny:%b, ng:%b, nly:%b, nlg:%b, sr:%b, sy:%b, sg:%b, sly:%b, slg:%b, er:%b, ey:%b, eg:%b, ely:%b, elg:%b, wr:%b, wy:%b, wg:%b, wly:%b, wlg:%b", nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg ,er, ey, eg, ely, elg, wr, wy, wg, wly, wlg);
+   
+    toggle_clock;
+    $display("S5: nr:%b, ny:%b, ng:%b, nly:%b, nlg:%b, sr:%b, sy:%b, sg:%b, sly:%b, slg:%b, er:%b, ey:%b, eg:%b, ely:%b, elg:%b, wr:%b, wy:%b, wg:%b, wly:%b, wlg:%b", nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg ,er, ey, eg, ely, elg, wr, wy, wg, wly, wlg);
+    
+    toggle_clock;
+    $display("S6: nr:%b, ny:%b, ng:%b, nly:%b, nlg:%b, sr:%b, sy:%b, sg:%b, sly:%b, slg:%b, er:%b, ey:%b, eg:%b, ely:%b, elg:%b, wr:%b, wy:%b, wg:%b, wly:%b, wlg:%b", nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg ,er, ey, eg, ely, elg, wr, wy, wg, wly, wlg);
+    
+    toggle_clock;
+    $display("S7: nr:%b, ny:%b, ng:%b, nly:%b, nlg:%b, sr:%b, sy:%b, sg:%b, sly:%b, slg:%b, er:%b, ey:%b, eg:%b, ely:%b, elg:%b, wr:%b, wy:%b, wg:%b, wly:%b, wlg:%b", nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg ,er, ey, eg, ely, elg, wr, wy, wg, wly, wlg);
+   
+    toggle_clock;
+    $display("S8: nr:%b, ny:%b, ng:%b, nly:%b, nlg:%b, sr:%b, sy:%b, sg:%b, sly:%b, slg:%b, er:%b, ey:%b, eg:%b, ely:%b, elg:%b, wr:%b, wy:%b, wg:%b, wly:%b, wlg:%b", nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg ,er, ey, eg, ely, elg, wr, wy, wg, wly, wlg);
+    
+    toggle_clock;
+    $display("S9: nr:%b, ny:%b, ng:%b, nly:%b, nlg:%b, sr:%b, sy:%b, sg:%b, sly:%b, slg:%b, er:%b, ey:%b, eg:%b, ely:%b, elg:%b, wr:%b, wy:%b, wg:%b, wly:%b, wlg:%b", nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg ,er, ey, eg, ely, elg, wr, wy, wg, wly, wlg);
+    
+    toggle_clock;
+    $display("S10: nr:%b, ny:%b, ng:%b, nly:%b, nlg:%b, sr:%b, sy:%b, sg:%b, sly:%b, slg:%b, er:%b, ey:%b, eg:%b, ely:%b, elg:%b, wr:%b, wy:%b, wg:%b, wly:%b, wlg:%b", nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg ,er, ey, eg, ely, elg, wr, wy, wg, wly, wlg);
+    
+    toggle_clock;
+    $display("S11: nr:%b, ny:%b, ng:%b, nly:%b, nlg:%b, sr:%b, sy:%b, sg:%b, sly:%b, slg:%b, er:%b, ey:%b, eg:%b, ely:%b, elg:%b, wr:%b, wy:%b, wg:%b, wly:%b, wlg:%b", nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg ,er, ey, eg, ely, elg, wr, wy, wg, wly, wlg);
+    
+    toggle_clock;
+    $display("S12: nr:%b, ny:%b, ng:%b, nly:%b, nlg:%b, sr:%b, sy:%b, sg:%b, sly:%b, slg:%b, er:%b, ey:%b, eg:%b, ely:%b, elg:%b, wr:%b, wy:%b, wg:%b, wly:%b, wlg:%b", nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg ,er, ey, eg, ely, elg, wr, wy, wg, wly, wlg);
+    
+    toggle_clock;
+    $display("S13: nr:%b, ny:%b, ng:%b, nly:%b, nlg:%b, sr:%b, sy:%b, sg:%b, sly:%b, slg:%b, er:%b, ey:%b, eg:%b, ely:%b, elg:%b, wr:%b, wy:%b, wg:%b, wly:%b, wlg:%b", nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg ,er, ey, eg, ely, elg, wr, wy, wg, wly, wlg);
+    
+    toggle_clock;
+    $display("S0: nr:%b, ny:%b, ng:%b, nly:%b, nlg:%b, sr:%b, sy:%b, sg:%b, sly:%b, slg:%b, er:%b, ey:%b, eg:%b, ely:%b, elg:%b, wr:%b, wy:%b, wg:%b, wly:%b, wlg:%b", nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg ,er, ey, eg, ely, elg, wr, wy, wg, wly, wlg);
+    
+    toggle_clock;
+    $display("S1: nr:%b, ny:%b, ng:%b, nly:%b, nlg:%b, sr:%b, sy:%b, sg:%b, sly:%b, slg:%b, er:%b, ey:%b, eg:%b, ely:%b, elg:%b, wr:%b, wy:%b, wg:%b, wly:%b, wlg:%b", nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg ,er, ey, eg, ely, elg, wr, wy, wg, wly, wlg);
+    
+    toggle_clock;
+    $display("S2: nr:%b, ny:%b, ng:%b, nly:%b, nlg:%b, sr:%b, sy:%b, sg:%b, sly:%b, slg:%b, er:%b, ey:%b, eg:%b, ely:%b, elg:%b, wr:%b, wy:%b, wg:%b, wly:%b, wlg:%b", nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg ,er, ey, eg, ely, elg, wr, wy, wg, wly, wlg);
+  end
+  
+  task toggle_clock;
+    begin
+      #18 clock = ~clock;
+      #18 clock = ~clock;
+    end
+  endtask
+  
+endmodule
