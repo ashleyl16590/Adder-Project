@@ -1,2 +1,2 @@
-# Adder-Project
-In which I try to make an adder
+# Intel-Project
+In which I try to make adders and simulate a traffic intersection
