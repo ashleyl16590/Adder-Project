@@ -1,0 +1,564 @@
+//FSM for Traffic Light State Machine #5
+module fsm_traffic_light(
+  clock,
+  reset,
+  em,
+  tn,
+  ts,
+  te,
+  tw,
+  nr,
+  ny,
+  ng,
+  nly,
+  nlg,
+  sr,
+  sy,
+  sg,
+  sly,
+  slg,
+  er,
+  ey,
+  eg,
+  ely,
+  elg,
+  wr,
+  wy,
+  wg,
+  wly,
+  wlg
+);
+  
+  //Input Ports
+  input clock, reset, em, tn, te, tw;
+  
+  //Output Ports
+  output ts, nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg, er, ey, eg, ely, elg, wr, wy, wg, wly, wlg;
+  
+  //Input Ports Data Type
+  wire clock, reset, em, tn, te, tw;
+  
+  //Output Ports Data Type
+  reg ts, nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg, er, ey, eg, ely, elg, wr, wy, wg, wly, wlg;
+  
+  //Internal Constants
+  parameter SIZE = 14;
+  parameter IDLE=14'b00000000000001, S1=14'b00000000000010, S2=14'b00000000000100, S3=14'b00000000001000, S4=14'b00000000010000, S5=14'b00000000100000, S6=14'b00000001000000, S7=14'b00000010000000, S8=14'b00000100000000, S9=14'b00001000000000, S10=14'b00010000000000, S11=14'b00100000000000, S12=14'b01000000000000, S13=14'b10000000000000;
+  
+  //Internal Variables
+  reg [SIZE-1:0] state;
+  reg [SIZE-1:0] next_state;
+  reg [SIZE-1:0] current_state;
+  reg [SIZE-1:0] no_left_north;
+  reg [SIZE-1:0] no_left_south;
+  reg [SIZE-1:0] no_left_east;
+  reg [SIZE-1:0] no_left_west;
+  
+  //Code Starts Here
+  assign next_state = fsm_function(state);
+  assign current_state = stay_function(state);
+  assign no_left_north = left_north_function(state);
+  assign no_left_south = left_south_function(state);
+  assign no_left_east = left_east_function(state);
+  assign no_left_west = left_west_function(state);
+  
+  function [SIZE-1:0] left_north_function;
+    input [SIZE-1:0] state;
+    case(state)
+      S4: begin
+        left_north_function = S7;
+      end
+      default: left_north_function = IDLE;
+    endcase
+  endfunction
+  
+  function [SIZE-1:0] left_south_function;
+    input [SIZE-1:0] state;
+    case(state)
+      IDLE: begin
+        left_south_function = S3;
+        ts<=1'b1;
+      end
+      default: left_south_function = IDLE;
+    endcase
+  endfunction
+  
+  function [SIZE-1:0] left_east_function;
+    input [SIZE-1:0] state;
+    case(state)
+      S7: begin
+        left_east_function = S10;
+      end
+      default: left_east_function = IDLE;
+    endcase
+  endfunction
+  
+  function [SIZE-1:0] left_west_function;
+    input [SIZE-1:0] state;
+    case(state)
+      S11: begin
+        left_west_function = IDLE;
+      end
+      default: left_west_function = IDLE;
+    endcase
+  endfunction
+  
+  //Function for Combo Logic
+  function [SIZE-1:0] fsm_function;
+    input [SIZE-1:0] state;
+    case(state)
+      IDLE: begin
+        fsm_function = S1;
+      end
+      S1: begin
+        fsm_function = S2;
+      end
+      S2: begin
+        fsm_function = S3;
+      end
+      S3: begin
+        fsm_function = S4;
+      end
+      S4: begin
+        fsm_function = S5;
+      end
+      S5: begin
+        fsm_function = S6;
+      end
+      S6: begin
+        fsm_function = S7;
+      end
+      S7: begin
+        fsm_function = S8;
+      end
+      S8: begin
+        fsm_function = S9;
+      end
+      S9: begin
+        fsm_function = S10;
+      end
+      S10: begin
+        fsm_function = S11;
+      end
+      S11: begin
+        fsm_function = S12;
+      end
+      S12: begin
+        fsm_function = S13;
+      end
+      S13: begin
+        fsm_function = IDLE;
+      end
+      default: fsm_function = IDLE;
+    endcase
+  endfunction
+  
+  function [SIZE-1:0] stay_function;
+    input [SIZE-1:0] state;
+    case(state)
+      IDLE: begin
+        stay_function = IDLE;
+      end
+      S1: begin
+        stay_function = S1;
+      end
+      S2: begin
+        stay_function = S2;
+      end
+      S3: begin
+        stay_function = S3;
+      end
+      S4: begin
+        stay_function = S4;
+      end
+      S5: begin
+        stay_function = S5;
+      end
+      S6: begin
+        stay_function = S6;
+      end
+      S7: begin
+        stay_function = S7;
+      end
+      S8: begin
+        stay_function = S8;
+      end
+      S9: begin
+        stay_function = S9;
+      end
+      S10: begin
+        stay_function = S10;
+      end
+      S11: begin
+        stay_function = S11;
+      end
+      S12: begin
+        stay_function = S12;
+      end
+      S13: begin
+        stay_function = S13;
+      end
+      default: stay_function = IDLE;
+    endcase
+  endfunction
+  
+  //Seq Logic
+  always @ (posedge clock)
+    begin: FSM_SEQ
+      if(reset == 1'b1) begin
+        state <=IDLE;
+      end else if(em == 1'b1) begin
+        state <= current_state;
+      end else if(tn == 1'b0 && state==S4) begin
+        state <= no_left_north;
+      end else if(ts == 1'b0 && state==IDLE) begin
+        state <= no_left_south;
+      end else if(te == 1'b0 && state==S7) begin
+        state <= no_left_east;
+      end else if(tw == 1'b0 && state==S11) begin
+        state <= no_left_west;
+      end else begin
+        state <= next_state;
+      end
+    end
+  
+  //Output Logic
+  always @ (posedge clock)
+    begin: OUTPUT_LOGIC
+      if(reset == 1'b1) begin
+        nr <= 1'b1;
+        ny <= 1'b0;
+        ng <= 1'b0;
+        nly <= 1'b0;
+        nlg <= 1'b0;
+        sr <= 1'b1;
+        sy <= 1'b0;
+        sg <= 1'b0;
+        sly <= 1'b0;
+        slg <= 1'b0;
+        er <= 1'b1;
+        ey <= 1'b0;
+        eg <= 1'b0;
+        ely <= 1'b0;
+        elg <= 1'b0;
+        wr <= 1'b1;
+        wy <= 1'b0;
+        wg <= 1'b0;
+        wly <= 1'b0;
+        wlg <= 1'b0;
+      end
+      else begin
+        case(state)
+          IDLE: begin
+            nr <= 1'b1;
+            ny <= 1'b0;
+            ng <= 1'b0;
+            nly <= 1'b0;
+            nlg <= 1'b0;
+            sr <= 1'b1;
+            sy <= 1'b0;
+            sg <= 1'b0;
+            sly <= 1'b0;
+            slg <= 1'b0;
+            er <= 1'b1;
+            ey <= 1'b0;
+            eg <= 1'b0;
+            ely <= 1'b0;
+            elg <= 1'b0;
+            wr <= 1'b1;
+            wy <= 1'b0;
+            wg <= 1'b0;
+            wly <= 1'b0;
+            wlg <= 1'b0;
+          end
+          S1: begin
+            nr <= 1'b1;
+            ny <= 1'b0;
+            ng <= 1'b0;
+            nly <= 1'b0;
+            nlg <= 1'b0;
+            sr <= 1'b0;
+            sy <= 1'b0;
+            sg <= 1'b1;
+            sly <= 1'b0;
+            slg <= 1'b1;
+            er <= 1'b1;
+            ey <= 1'b0;
+            eg <= 1'b0;
+            ely <= 1'b0;
+            elg <= 1'b0;
+            wr <= 1'b1;
+            wy <= 1'b0;
+            wg <= 1'b0;
+            wly <= 1'b0;
+            wlg <= 1'b0;
+          end
+          S2: begin
+            nr <= 1'b1;
+            ny <= 1'b0;
+            ng <= 1'b0;
+            nly <= 1'b0;
+            nlg <= 1'b0;
+            sr <= 1'b0;
+            sy <= 1'b0;
+            sg <= 1'b1;
+            sly <= 1'b1;
+            slg <= 1'b0;
+            er <= 1'b1;
+            ey <= 1'b0;
+            eg <= 1'b0;
+            ely <= 1'b0;
+            elg <= 1'b0;
+            wr <= 1'b1;
+            wy <= 1'b0;
+            wg <= 1'b0;
+            wly <= 1'b0;
+            wlg <= 1'b0;
+          end
+          S3: begin
+            nr <= 1'b0;
+            ny <= 1'b0;
+            ng <= 1'b1;
+            nly <= 1'b0;
+            nlg <= 1'b0;
+            sr <= 1'b0;
+            sy <= 1'b0;
+            sg <= 1'b1;
+            sly <= 1'b0;
+            slg <= 1'b0;
+            er <= 1'b1;
+            ey <= 1'b0;
+            eg <= 1'b0;
+            ely <= 1'b0;
+            elg <= 1'b0;
+            wr <= 1'b1;
+            wy <= 1'b0;
+            wg <= 1'b0;
+            wly <= 1'b0;
+            wlg <= 1'b0;
+          end
+          S4: begin
+            nr <= 1'b0;
+            ny <= 1'b0;
+            ng <= 1'b1;
+            nly <= 1'b0;
+            nlg <= 1'b0;
+            sr <= 1'b0;
+            sy <= 1'b1;
+            sg <= 1'b0;
+            sly <= 1'b0;
+            slg <= 1'b0;
+            er <= 1'b1;
+            ey <= 1'b0;
+            eg <= 1'b0;
+            ely <= 1'b0;
+            elg <= 1'b0;
+            wr <= 1'b1;
+            wy <= 1'b0;
+            wg <= 1'b0;
+            wly <= 1'b0;
+            wlg <= 1'b0;
+          end
+          S5: begin
+            nr <= 1'b0;
+            ny <= 1'b0;
+            ng <= 1'b1;
+            nly <= 1'b0;
+            nlg <= 1'b1;
+            sr <= 1'b1;
+            sy <= 1'b0;
+            sg <= 1'b0;
+            sly <= 1'b0;
+            slg <= 1'b0;
+            er <= 1'b1;
+            ey <= 1'b0;
+            eg <= 1'b0;
+            ely <= 1'b0;
+            elg <= 1'b0;
+            wr <= 1'b1;
+            wy <= 1'b0;
+            wg <= 1'b0;
+            wly <= 1'b0;
+            wlg <= 1'b0;
+          end
+          S6: begin
+            nr <= 1'b0;
+            ny <= 1'b1;
+            ng <= 1'b0;
+            nly <= 1'b1;
+            nlg <= 1'b0;
+            sr <= 1'b1;
+            sy <= 1'b0;
+            sg <= 1'b0;
+            sly <= 1'b0;
+            slg <= 1'b0;
+            er <= 1'b1;
+            ey <= 1'b0;
+            eg <= 1'b0;
+            ely <= 1'b0;
+            elg <= 1'b0;
+            wr <= 1'b1;
+            wy <= 1'b0;
+            wg <= 1'b0;
+            wly <= 1'b0;
+            wlg <= 1'b0;
+          end
+          S7: begin
+            nr <= 1'b1;
+            ny <= 1'b0;
+            ng <= 1'b0;
+            nly <= 1'b0;
+            nlg <= 1'b0;
+            sr <= 1'b1;
+            sy <= 1'b0;
+            sg <= 1'b0;
+            sly <= 1'b0;
+            slg <= 1'b0;
+            er <= 1'b1;
+            ey <= 1'b0;
+            eg <= 1'b0;
+            ely <= 1'b0;
+            elg <= 1'b0;
+            wr <= 1'b1;
+            wy <= 1'b0;
+            wg <= 1'b0;
+            wly <= 1'b0;
+            wlg <= 1'b0;
+   			ts <=1'b1;
+          end
+          S8: begin
+            nr <= 1'b1;
+            ny <= 1'b0;
+            ng <= 1'b0;
+            nly <= 1'b0;
+            nlg <= 1'b0;
+            sr <= 1'b1;
+            sy <= 1'b0;
+            sg <= 1'b0;
+            sly <= 1'b0;
+            slg <= 1'b0;
+            er <= 1'b0;
+            ey <= 1'b0;
+            eg <= 1'b1;
+            ely <= 1'b0;
+            elg <= 1'b1;
+            wr <= 1'b1;
+            wy <= 1'b0;
+            wg <= 1'b0;
+            wly <= 1'b0;
+            wlg <= 1'b0;
+          end
+          S9: begin
+            nr <= 1'b1;
+            ny <= 1'b0;
+            ng <= 1'b0;
+            nly <= 1'b0;
+            nlg <= 1'b0;
+            sr <= 1'b1;
+            sy <= 1'b0;
+            sg <= 1'b0;
+            sly <= 1'b0;
+            slg <= 1'b0;
+            er <= 1'b0;
+            ey <= 1'b0;
+            eg <= 1'b1;
+            ely <= 1'b1;
+            elg <= 1'b0;
+            wr <= 1'b1;
+            wy <= 1'b0;
+            wg <= 1'b0;
+            wly <= 1'b0;
+            wlg <= 1'b0;
+          end
+          S10: begin
+            nr <= 1'b1;
+            ny <= 1'b0;
+            ng <= 1'b0;
+            nly <= 1'b0;
+            nlg <= 1'b0;
+            sr <= 1'b1;
+            sy <= 1'b0;
+            sg <= 1'b0;
+            sly <= 1'b0;
+            slg <= 1'b0;
+            er <= 1'b0;
+            ey <= 1'b0;
+            eg <= 1'b1;
+            ely <= 1'b0;
+            elg <= 1'b0;
+            wr <= 1'b0;
+            wy <= 1'b0;
+            wg <= 1'b1;
+            wly <= 1'b0;
+            wlg <= 1'b0;
+          end
+          S11: begin
+            nr <= 1'b1;
+            ny <= 1'b0;
+            ng <= 1'b0;
+            nly <= 1'b0;
+            nlg <= 1'b0;
+            sr <= 1'b1;
+            sy <= 1'b0;
+            sg <= 1'b0;
+            sly <= 1'b0;
+            slg <= 1'b0;
+            er <= 1'b0;
+            ey <= 1'b1;
+            eg <= 1'b0;
+            ely <= 1'b0;
+            elg <= 1'b0;
+            wr <= 1'b0;
+            wy <= 1'b0;
+            wg <= 1'b1;
+            wly <= 1'b0;
+            wlg <= 1'b0;
+          end
+          S12: begin
+            nr <= 1'b1;
+            ny <= 1'b0;
+            ng <= 1'b0;
+            nly <= 1'b0;
+            nlg <= 1'b0;
+            sr <= 1'b1;
+            sy <= 1'b0;
+            sg <= 1'b0;
+            sly <= 1'b0;
+            slg <= 1'b0;
+            er <= 1'b1;
+            ey <= 1'b0;
+            eg <= 1'b0;
+            ely <= 1'b0;
+            elg <= 1'b0;
+            wr <= 1'b0;
+            wy <= 1'b0;
+            wg <= 1'b1;
+            wly <= 1'b0;
+            wlg <= 1'b1;
+          end
+          S13: begin
+            nr <= 1'b1;
+            ny <= 1'b0;
+            ng <= 1'b0;
+            nly <= 1'b0;
+            nlg <= 1'b0;
+            sr <= 1'b1;
+            sy <= 1'b0;
+            sg <= 1'b0;
+            sly <= 1'b0;
+            slg <= 1'b0;
+            er <= 1'b1;
+            ey <= 1'b0;
+            eg <= 1'b0;
+            ely <= 1'b0;
+            elg <= 1'b0;
+            wr <= 1'b0;
+            wy <= 1'b1;
+            wg <= 1'b0;
+            wly <= 1'b1;
+            wlg <= 1'b0;
+          end
+        endcase
+      end
+    end
+endmodule
