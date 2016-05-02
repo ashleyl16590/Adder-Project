@@ -7,6 +7,7 @@ module fsm_traffic_light(
   ts,
   te,
   tw,
+  wn,
   nr,
   ny,
   ng,
@@ -26,20 +27,22 @@ module fsm_traffic_light(
   wy,
   wg,
   wly,
-  wlg
+  wlg,
+  hn,
+  nw
 );
   
   //Input Ports
-  input clock, reset, em, tn, te, tw;
+  input clock, reset, em, tn, ts, te, tw, wn;
   
   //Output Ports
-  output ts, nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg, er, ey, eg, ely, elg, wr, wy, wg, wly, wlg;
+  output nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg, er, ey, eg, ely, elg, wr, wy, wg, wly, wlg, hn, nw;
   
   //Input Ports Data Type
-  wire clock, reset, em, tn, te, tw;
+  wire clock, reset, em, tn, ts, te, tw, wn;
   
   //Output Ports Data Type
-  reg ts, nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg, er, ey, eg, ely, elg, wr, wy, wg, wly, wlg;
+  reg nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg, er, ey, eg, ely, elg, wr, wy, wg, wly, wlg, hn, nw;
   
   //Internal Constants
   parameter SIZE = 14;
@@ -77,7 +80,6 @@ module fsm_traffic_light(
     case(state)
       IDLE: begin
         left_south_function = S3;
-        ts<=1'b1;
       end
       default: left_south_function = IDLE;
     endcase
@@ -222,6 +224,14 @@ module fsm_traffic_light(
       end
     end
   
+  //convert pedestrian button to hold
+  always @ (posedge clock)
+    begin: TO_WALK
+      if(wn==1'b1) begin
+        hn <= 1'b1;
+      end
+    end
+  
   //Output Logic
   always @ (posedge clock)
     begin: OUTPUT_LOGIC
@@ -246,6 +256,8 @@ module fsm_traffic_light(
         wg <= 1'b0;
         wly <= 1'b0;
         wlg <= 1'b0;
+        hn <= 1'b0;
+        nw <= 1'b0;
       end
       else begin
         case(state)
@@ -336,6 +348,9 @@ module fsm_traffic_light(
             wg <= 1'b0;
             wly <= 1'b0;
             wlg <= 1'b0;
+            if(hn==1'b1) begin
+              nw <= 1'b1;
+            end
           end
           S4: begin
             nr <= 1'b0;
@@ -358,6 +373,8 @@ module fsm_traffic_light(
             wg <= 1'b0;
             wly <= 1'b0;
             wlg <= 1'b0;
+            hn <= 1'b0;
+            nw <= 1'b0;
           end
           S5: begin
             nr <= 1'b0;
@@ -424,7 +441,6 @@ module fsm_traffic_light(
             wg <= 1'b0;
             wly <= 1'b0;
             wlg <= 1'b0;
-   			ts <=1'b1;
           end
           S8: begin
             nr <= 1'b1;
