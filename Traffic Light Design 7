@@ -1,4 +1,4 @@
-//FSM for Traffic Light State Machine #5
+//FSM for Traffic Light State Machine #7
 module fsm_traffic_light(
   clock,
   reset,
@@ -8,6 +8,9 @@ module fsm_traffic_light(
   te,
   tw,
   wn,
+  ws,
+  we,
+  ww,
   nr,
   ny,
   ng,
@@ -29,20 +32,26 @@ module fsm_traffic_light(
   wly,
   wlg,
   hn,
-  nw
+  hs,
+  he,
+  hw,
+  nw,
+  sw,
+  ew,
+  www
 );
   
   //Input Ports
-  input clock, reset, em, tn, ts, te, tw, wn;
+  input clock, reset, em, tn, ts, te, tw, wn, ws, we, ww;
   
   //Output Ports
-  output nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg, er, ey, eg, ely, elg, wr, wy, wg, wly, wlg, hn, nw;
+  output nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg, er, ey, eg, ely, elg, wr, wy, wg, wly, wlg, hn, hs, he, hw, nw, sw, ew, www;
   
   //Input Ports Data Type
-  wire clock, reset, em, tn, ts, te, tw, wn;
+  wire clock, reset, em, tn, ts, te, tw, wn, ws, we, ww;
   
   //Output Ports Data Type
-  reg nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg, er, ey, eg, ely, elg, wr, wy, wg, wly, wlg, hn, nw;
+  reg nr, ny, ng, nly, nlg, sr, sy, sg, sly, slg, er, ey, eg, ely, elg, wr, wy, wg, wly, wlg, hn, hs, he, hw, nw, sw, ew, www;
   
   //Internal Constants
   parameter SIZE = 14;
@@ -208,7 +217,7 @@ module fsm_traffic_light(
   always @ (posedge clock)
     begin: FSM_SEQ
       if(reset == 1'b1) begin
-        state <=IDLE;
+        state <= IDLE;
       end else if(em == 1'b1) begin
         state <= current_state;
       end else if(tn == 1'b0 && state==S4) begin
@@ -226,9 +235,30 @@ module fsm_traffic_light(
   
   //convert pedestrian button to hold
   always @ (posedge clock)
-    begin: TO_WALK
+    begin: TO_WALK_NORTH
       if(wn==1'b1) begin
         hn <= 1'b1;
+      end
+    end
+  
+  always @ (posedge clock)
+    begin: TO_WALK_SOUTH
+      if(ws==1'b1) begin
+        hs <= 1'b1;
+      end
+    end
+  
+  always @ (posedge clock)
+    begin: TO_WALK_EAST
+      if(we==1'b1) begin
+        he <= 1'b1;
+      end
+    end
+  
+  always @ (posedge clock)
+    begin: TO_WALK_WEST
+      if(ww==1'b1) begin
+        hw <= 1'b1;
       end
     end
   
@@ -257,7 +287,13 @@ module fsm_traffic_light(
         wly <= 1'b0;
         wlg <= 1'b0;
         hn <= 1'b0;
+        hs <= 1'b0;
+        he <= 1'b0;
+        hw <= 1'b0;
         nw <= 1'b0;
+        sw <= 1'b0;
+        ew <= 1'b0;
+        www <= 1'b0;
       end
       else begin
         case(state)
@@ -351,6 +387,9 @@ module fsm_traffic_light(
             if(hn==1'b1) begin
               nw <= 1'b1;
             end
+            if(hs==1'b1) begin
+              sw <= 1'b1;
+            end
           end
           S4: begin
             nr <= 1'b0;
@@ -374,7 +413,9 @@ module fsm_traffic_light(
             wly <= 1'b0;
             wlg <= 1'b0;
             hn <= 1'b0;
+            hs <= 1'b0;
             nw <= 1'b0;
+            sw <= 1'b0;
           end
           S5: begin
             nr <= 1'b0;
@@ -507,6 +548,12 @@ module fsm_traffic_light(
             wg <= 1'b1;
             wly <= 1'b0;
             wlg <= 1'b0;
+            if(he==1'b1) begin
+              ew <= 1'b1;
+            end
+            if(hw==1'b1) begin
+              www <= 1'b1;
+            end
           end
           S11: begin
             nr <= 1'b1;
@@ -529,6 +576,10 @@ module fsm_traffic_light(
             wg <= 1'b1;
             wly <= 1'b0;
             wlg <= 1'b0;
+            he <= 1'b0;
+            hw <= 1'b0;
+            ew <= 1'b0;
+            www <= 1'b0;
           end
           S12: begin
             nr <= 1'b1;
